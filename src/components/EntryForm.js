@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 
-export const EntryForm = ({ entry, moods, onFormSubmit }) => {
+export const EntryForm = ({ entry, moods, onFormSubmit, tags }) => {
     const [editMode, setEditMode] = useState(false)
     const [updatedEntry, setUpdatedEntry] = useState(entry)
 
@@ -32,6 +32,12 @@ export const EntryForm = ({ entry, moods, onFormSubmit }) => {
         if (!copyEntry.date) {
             copyEntry.date = Date(Date.now()).toLocaleString('en-us').split('GMT')[0]
         }
+        const tagValues = []
+        const checkboxes = document.querySelectorAll(`input[type="checkbox"]:checked`)
+        checkboxes.forEach((checkbox => {
+            tagValues.push(parseInt(checkbox.value))
+        }))
+        copyEntry.tags = tagValues
         onFormSubmit(copyEntry)
     }
 
@@ -81,6 +87,20 @@ export const EntryForm = ({ entry, moods, onFormSubmit }) => {
                             </div>
                         </div>
                     </div>
+
+                    <div className="field">
+                        <label htmlFor="tags" className="label">Tags: </label>
+                        <div className="control">
+                            <div className="TagCheckbox">
+                                {tags.map(t => (
+                                    <div>
+                                    <input type="checkbox" name="tags" value={t.id}/>{t.name}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
                     <div className="field">
                         <div className="control">
                             <button type="submit"
